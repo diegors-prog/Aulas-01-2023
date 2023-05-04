@@ -15,6 +15,9 @@ using Microsoft.Extensions.DependencyInjection;
             x => x.UseSqlite(builder.Configuration.GetConnectionString("DataSource=app.db;Cache=Shared"))
         );
 
+        // builder.Services.AddDbContext<DataContext>(options =>
+        //     options.UseInMemoryDatabase("MyDatabase"));
+
         builder.Services.AddScoped<IFornecedorRepository, FornecedorRepository>();
         builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
         builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();

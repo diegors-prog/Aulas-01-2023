@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace gestaoclick_console.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230503190512_initialMigration")]
+    [Migration("20230503233109_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -24,129 +24,107 @@ namespace gestaoclick_console.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Bairro")
                         .IsRequired()
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("bairro");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Cep")
                         .IsRequired()
-                        .HasColumnType("varchar(8)")
-                        .HasColumnName("cep");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Cidade")
                         .IsRequired()
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("cidade");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Complemento")
                         .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("complemento");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Estado")
                         .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("estado");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("FornecedorId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("fornecedor_id");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Logradouro")
                         .IsRequired()
-                        .HasColumnType("varchar(200)")
-                        .HasColumnName("logradouro");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Numero")
                         .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("numero");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FornecedorId")
                         .IsUnique();
 
-                    b.ToTable("enderecos", (string)null);
+                    b.ToTable("DbSetEndereco");
                 });
 
             modelBuilder.Entity("Domain.Entities.Fornecedor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Ativo")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("ativo");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Documento")
                         .IsRequired()
-                        .HasColumnType("varchar(14)")
-                        .HasColumnName("documento");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("varchar(200)")
-                        .HasColumnName("nome");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TipoFornecedor")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("tipo_fornecedor");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.ToTable("fornecedores", (string)null);
+                    b.ToTable("DbSetFornecedor");
                 });
 
             modelBuilder.Entity("Domain.Entities.Produto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Ativo")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("ativo");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("data_cadastro");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("varchar(1000)")
-                        .HasColumnName("descricao");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("FornecedorId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("fornecedor_id");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Imagem")
                         .IsRequired()
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("imagem");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("varchar(200)")
-                        .HasColumnName("nome");
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("valor");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FornecedorId");
 
-                    b.ToTable("produtos", (string)null);
+                    b.ToTable("DbSetProduto");
                 });
 
             modelBuilder.Entity("Domain.Entities.Endereco", b =>

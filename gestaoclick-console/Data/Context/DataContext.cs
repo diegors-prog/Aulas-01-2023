@@ -15,11 +15,11 @@ namespace Data.Context
         public DbSet<Produto> DbSetProduto { get; set; }
         public DbSet<Endereco> DbSetEndereco { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfiguration(new FornecedorMap());
-            modelBuilder.ApplyConfiguration(new ProdutoMap());
-            modelBuilder.ApplyConfiguration(new EnderecoMap());
-        }
+        // protected override void OnModelCreating(ModelBuilder modelBuilder)
+        // {
+        //     modelBuilder.ApplyConfiguration(new FornecedorMap());
+        //     modelBuilder.ApplyConfiguration(new ProdutoMap());
+        //     modelBuilder.ApplyConfiguration(new EnderecoMap());
+        // }
     }
 }

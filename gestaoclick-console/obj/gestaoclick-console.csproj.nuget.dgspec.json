@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "/Users/diegorocha/Developer/Aulas-01-2023/gestaoclick-console/gestaoclick-console.csproj": {}
+    "C:\\Users\\diego\\OneDrive\\Área de Trabalho\\Aulas-01-2023\\gestaoclick-console\\gestaoclick-console.csproj": {}
   },
   "projects": {
-    "/Users/diegorocha/Developer/Aulas-01-2023/gestaoclick-console/gestaoclick-console.csproj": {
+    "C:\\Users\\diego\\OneDrive\\Área de Trabalho\\Aulas-01-2023\\gestaoclick-console\\gestaoclick-console.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/diegorocha/Developer/Aulas-01-2023/gestaoclick-console/gestaoclick-console.csproj",
+        "projectUniqueName": "C:\\Users\\diego\\OneDrive\\Área de Trabalho\\Aulas-01-2023\\gestaoclick-console\\gestaoclick-console.csproj",
         "projectName": "gestaoclick-console",
-        "projectPath": "/Users/diegorocha/Developer/Aulas-01-2023/gestaoclick-console/gestaoclick-console.csproj",
-        "packagesPath": "/Users/diegorocha/.nuget/packages/",
-        "outputPath": "/Users/diegorocha/Developer/Aulas-01-2023/gestaoclick-console/obj/",
+        "projectPath": "C:\\Users\\diego\\OneDrive\\Área de Trabalho\\Aulas-01-2023\\gestaoclick-console\\gestaoclick-console.csproj",
+        "packagesPath": "C:\\Users\\diego\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\diego\\OneDrive\\Área de Trabalho\\Aulas-01-2023\\gestaoclick-console\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/diegorocha/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\diego\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -50,6 +52,10 @@
               "target": "Package",
               "version": "[7.0.4, )"
             },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[7.0.4, )"
@@ -60,7 +66,7 @@
               "target": "Package",
               "version": "[7.0.4, )"
             },
-            "Microsoft.Extensions.Configuration": {
+            "Microsoft.Extensions.Configuration.json": {
               "target": "Package",
               "version": "[7.0.0, )"
             },
@@ -85,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.100/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
