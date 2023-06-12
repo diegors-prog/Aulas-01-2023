@@ -3,18 +3,25 @@ using Domain.DTOs;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {
+    [Authorize]
     [Route("api/produtos")]
-    public class ProdutoController : ControllerBase
+    public class ProdutoController : MainController
     {
         private readonly IProdutoRepository _produtoRepository;
         private readonly IProdutoService _produtoService;
         private readonly IMapper _mapper;
 
-        public ProdutoController(IProdutoRepository produtoRepository, IProdutoService produtoService, IMapper mapper)
+        public ProdutoController(INotificadorService notificador,
+                                 IProdutoRepository produtoRepository,
+                                 IProdutoService produtoService,
+                                 IMapper mapper,
+                                 IUser user) : base(notificador, user)
         {
             _produtoRepository = produtoRepository;
             _produtoService = produtoService;
@@ -24,46 +31,56 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var produtos = _mapper.Map<IList<ProdutoDTO>>(await _produtoRepository.GetAllAsync());
-            return HttpMessageOk(produtos);
+            return CustomResponse(_mapper.Map<IList<ProdutoDTO>>(await _produtoRepository.GetAllAsync()));
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var produto = _mapper.Map<ProdutoDTO>(await _produtoRepository.GetByIdAsync(id));
-            return HttpMessageOk(produto);
+
+            if (produto == null) return NotFound();
+
+            return CustomResponse(produto);
         }
 
+        [ClaimsAuthorize("Produto","Adicionar")]
         [HttpPost]
         public async Task<IActionResult> AddAsync(ProdutoViewModel model)
         {
-            if (!ModelState.IsValid) return HttpMessageError("Dados incorretos");
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var produto = _mapper.Map<Produto>(model);
+
             produto.Imagem = UploadImage();
             produto.DataCadastro = DateTime.UtcNow;
-            var result = await _produtoService.Add(produto);
 
-            if (!result) return HttpMessageError("Dados invalidos");
+            await _produtoService.Add(produto);
 
-            return HttpMessageOk(_mapper.Map<ProdutoDTO>(produto));
+            return CustomResponse(_mapper.Map<ProdutoDTO>(produto));
         }
 
+        [ClaimsAuthorize("Produto","Atualizar")]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateAsync(int id, ProdutoViewModel model)
         {
-            if (!ModelState.IsValid) return HttpMessageError("Dados incorretos");
+            if (id != model.Id)
+            {
+                NotificarErro("O id informado não é o mesmo que foi passado na query");
+                return CustomResponse(model);
+            }
+
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var produto = _mapper.Map<Produto>(model);
             produto.Imagem = UploadImage();
-            var result = await _produtoService.Update(produto);
 
-            if (!result) return HttpMessageError("Dados invalidos");
+            await _produtoService.Update(produto);
 
-            return HttpMessageOk(_mapper.Map<ProdutoDTO>(produto));
+            return CustomResponse(_mapper.Map<ProdutoDTO>(produto));
         }
 
+        [ClaimsAuthorize("Produto","Remover")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> RemoveAsync(int id)
         {
@@ -71,18 +88,15 @@ namespace WebApi.Controllers
 
             if (produto == null) return NotFound();
 
-            var result = await _produtoService.Remove(id);
+            await _produtoService.Remove(id);
 
-            if (!result) return HttpMessageError("Não foi possível remover o produto");
-
-            return HttpMessageOk(id);
+            return CustomResponse(_mapper.Map<ProdutoDTO>(produto));
         }
 
         [HttpGet("obter-produtos-fornecedores")]
         public async Task<IActionResult> ObterProdutosFornecedores()
         {
-            var produtos = _mapper.Map<IList<ProdutoDTO>>(await _produtoRepository.ObterProdutosFornecedores());
-            return HttpMessageOk(produtos);
+            return CustomResponse(_mapper.Map<IList<ProdutoDTO>>(await _produtoRepository.ObterProdutosFornecedores()));
         }
 
         private string UploadImage()
@@ -90,25 +104,6 @@ namespace WebApi.Controllers
             var typeImage = ".png";
 
             return Guid.NewGuid().ToString() + typeImage;
-        }
-
-        private IActionResult HttpMessageOk(dynamic data = null)
-        {
-            if (data == null)
-                return NoContent();
-            else
-                return Ok(new
-                {
-                    data
-                });
-        }
-
-        private IActionResult HttpMessageError(string message = "")
-        {
-            return BadRequest(new
-            {
-                message
-            });
         }
     }
 }

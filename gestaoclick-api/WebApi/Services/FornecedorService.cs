@@ -10,28 +10,37 @@ namespace Services
         private readonly IEnderecoRepository _enderecoRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public FornecedorService(IFornecedorRepository fornecedorRepository, IEnderecoRepository enderecoRepository, IUnitOfWork unitOfWork)
+        public FornecedorService(IFornecedorRepository fornecedorRepository,
+                                 IEnderecoRepository enderecoRepository,
+                                 IUnitOfWork unitOfWork,
+                                 INotificadorService notificador) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
             _enderecoRepository = enderecoRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task<bool> Add(Fornecedor fornecedor)
+        public async Task Add(Fornecedor fornecedor)
         {
             if (!ExecutarValidacao(new FornecedorValidation(), fornecedor)
-                || !ExecutarValidacao(new EnderecoValidation(), fornecedor.Endereco)) return false;
+                || !ExecutarValidacao(new EnderecoValidation(), fornecedor.Endereco)) return;
 
             if (_fornecedorRepository.SearchAll(x => x.Documento == fornecedor.Documento).Result.Any())
-                return false;
+            {
+                Notificar("Já existe um fornecedor com este documento infomado.");
+                return;
+            }
 
             _fornecedorRepository.Save(fornecedor);
             await _unitOfWork.Commit();
-            return true;
         }
 
-        public async Task<bool> Remove(int id)
+        public async Task Remove(int id)
         {
-            if (_fornecedorRepository.ObterFornecedorProdutoEndereco(id).Result.Produtos.Any()) return false;
+            if (_fornecedorRepository.ObterFornecedorProdutoEndereco(id).Result.Produtos.Any())
+            {
+                Notificar("O fornecedor possui produtos cadastrados!");
+                return;
+            }
 
             var endereco = await _enderecoRepository.ObterEnderecoPorFornecedor(id);
 
@@ -40,28 +49,28 @@ namespace Services
                 
             _fornecedorRepository.Delete(id);
             await _unitOfWork.Commit();
-            return true;
         }
 
-        public async Task<bool> Update(Fornecedor fornecedor)
+        public async Task Update(Fornecedor fornecedor)
         {
-            if (!ExecutarValidacao(new FornecedorValidation(), fornecedor)) return false;
+            if (!ExecutarValidacao(new FornecedorValidation(), fornecedor)) return;
 
             if (_fornecedorRepository.SearchAll(x => x.Documento == fornecedor.Documento && x.Id != fornecedor.Id).Result.Any())
-                return false;
+            {
+                Notificar("Já existe um fornecedor com este documento infomado.");
+                return;
+            }
 
             _fornecedorRepository.Update(fornecedor);
             await _unitOfWork.Commit();
-            return true;
         }
 
-        public async Task<bool> UpdateEndereco(Endereco endereco)
+        public async Task UpdateEndereco(Endereco endereco)
         {
-            if (!ExecutarValidacao(new EnderecoValidation(), endereco)) return false;
+            if (!ExecutarValidacao(new EnderecoValidation(), endereco)) return;
 
             _enderecoRepository.Update(endereco);
             await _unitOfWork.Commit();
-            return true;
         }
 
         public void Dispose()

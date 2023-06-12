@@ -3,18 +3,25 @@ using Domain.DTOs;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {
+    [Authorize]
     [Route("api/fornecedores")]
-    public class FornecedorController : ControllerBase
+    public class FornecedorController : MainController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
         private readonly IFornecedorService _fornecedorService;
         private readonly IMapper _mapper;
 
-        public FornecedorController(IFornecedorRepository fornecedorRepository, IFornecedorService fornecedorService, IMapper mapper)
+        public FornecedorController(INotificadorService notificador,
+                                    IFornecedorRepository fornecedorRepository,
+                                    IFornecedorService fornecedorService,
+                                    IMapper mapper,
+                                    IUser user) : base(notificador, user)
         {
             _fornecedorRepository = fornecedorRepository;
             _fornecedorService = fornecedorService;
@@ -24,81 +31,70 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var fornecedores = _mapper.Map<IList<FornecedorDTO>>(await _fornecedorRepository.GetAllAsync());
-            return HttpMessageOk(fornecedores);
+            return CustomResponse(_mapper.Map<IList<FornecedorDTO>>(await _fornecedorRepository.GetAllAsync()));
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var fornecedor = _mapper.Map<FornecedorDTO>(await _fornecedorRepository.GetByIdAsync(id));
-            return HttpMessageOk(fornecedor);
+
+            if (fornecedor == null) return NotFound();
+
+            return CustomResponse(fornecedor);
         }
 
+        [ClaimsAuthorize("Fornecedor","Adicionar")]
         [HttpPost]
-        public async Task<IActionResult> AddAsync(FornecedorViewModel model)
+        public async Task<ActionResult<FornecedorDTO>> AddAsync(FornecedorViewModel model)
         {
-            if (!ModelState.IsValid) return HttpMessageError("Dados incorretos");
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var fornecedor = _mapper.Map<Fornecedor>(model);
-            var result = await _fornecedorService.Add(fornecedor);
+            await _fornecedorService.Add(fornecedor);
 
-            if (!result) return HttpMessageError("Dados invalidos");
-
-            return HttpMessageOk(_mapper.Map<FornecedorDTO>(fornecedor));
+            return CustomResponse(_mapper.Map<FornecedorDTO>(fornecedor));
         }
 
+        [ClaimsAuthorize("Fornecedor","Atualizar")]
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateAsync(int id, FornecedorViewModel model)
+        public async Task<ActionResult<FornecedorDTO>> UpdateAsync(int id, FornecedorViewModel model)
         {
-            if (!ModelState.IsValid) return HttpMessageError("Dados incorretos");
+            if (id != model.Id)
+            {
+                NotificarErro("O id informado não é o mesmo que foi passado na query");
+                return CustomResponse(model);
+            }
+
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var fornecedor = _mapper.Map<Fornecedor>(model);
-            var result = await _fornecedorService.Update(fornecedor);
+            await _fornecedorService.Update(fornecedor);
 
-            if (!result) return HttpMessageError("Dados invalidos");
-
-            return HttpMessageOk(_mapper.Map<FornecedorDTO>(fornecedor));
+            return CustomResponse(_mapper.Map<FornecedorDTO>(fornecedor));
         }
 
+        [ClaimsAuthorize("Fornecedor","Remover")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> RemoveAsync(int id)
         {
-            var produto = await _fornecedorRepository.ObterFornecedorEndereco(id);
+            var fornecedor = await _fornecedorRepository.GetByIdAsync(id);
 
-            if (produto == null) return NotFound();
+            if (fornecedor == null) return NotFound();
 
-            var result = await _fornecedorService.Remove(id);
+            await _fornecedorService.Remove(id);
 
-            if (!result) return HttpMessageError("Não foi possível remover o fornecedor");
-
-            return HttpMessageOk(id);
+            return CustomResponse(_mapper.Map<FornecedorDTO>(fornecedor));
         }
 
         [HttpGet("obter-fornecedor-produto-endereco/{id:int}")]
         public async Task<IActionResult> ObterProdutosFornecedores(int id)
         {
             var fornecedor = _mapper.Map<FornecedorDTO>(await _fornecedorRepository.ObterFornecedorProdutoEndereco(id));
-            return HttpMessageOk(fornecedor);
-        }
 
-        private IActionResult HttpMessageOk(dynamic data = null)
-        {
-            if (data == null)
-                return NoContent();
-            else
-                return Ok(new
-                {
-                    data,
-                });
-        }
+            if (fornecedor == null) return NotFound();
 
-        private IActionResult HttpMessageError(string message = "")
-        {
-            return BadRequest(new
-            {
-                message
-            });
+            return CustomResponse(fornecedor);
         }
     }
 }

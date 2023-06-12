@@ -9,41 +9,41 @@ namespace Services
         private readonly IProdutoRepository _produtoRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ProdutoService(IProdutoRepository produtoRepository, IUnitOfWork unitOfWork)
+        public ProdutoService(IProdutoRepository produtoRepository,
+                              IUnitOfWork unitOfWork,
+                              INotificadorService notificador) : base(notificador)
         {
             _produtoRepository = produtoRepository;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> Add(Produto produto)
+        public async Task Add(Produto produto)
         {
-            if (!ExecutarValidacao(new ProdutoValidation(), produto)) return false;
+            if (!ExecutarValidacao(new ProdutoValidation(), produto)) return;
 
             _produtoRepository.Save(produto);
             await _unitOfWork.Commit();
-            return true;
         }
 
-        public async Task<bool> Remove(int id)
+        public async Task Remove(int id)
         {
             var wasRemoved = _produtoRepository.Delete(id);
 
-            if (wasRemoved)
+            if (!wasRemoved)
             {
-                await _unitOfWork.Commit();
-                return true;
+                Notificar("Id inválido, não foi possível remover o produto");
+                return;
             }
-            else
-                return false;
+
+            await _unitOfWork.Commit();
         }
 
-        public async Task<bool> Update(Produto produto)
+        public async Task Update(Produto produto)
         {
-            if (!ExecutarValidacao(new ProdutoValidation(), produto)) return false;
+            if (!ExecutarValidacao(new ProdutoValidation(), produto)) return;
 
             _produtoRepository.Update(produto);
             await _unitOfWork.Commit();
-            return true;
         }
 
         public void Dispose()

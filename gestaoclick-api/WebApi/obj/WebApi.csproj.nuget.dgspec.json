@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "/Users/diegorocha/Developer/Aulas-01-2023/gestaoclick-api/WebApi/WebApi.csproj": {}
+    "C:\\Users\\diego\\OneDrive\\Área de Trabalho\\Aulas-01-2023\\gestaoclick-api\\WebApi\\WebApi.csproj": {}
   },
   "projects": {
-    "/Users/diegorocha/Developer/Aulas-01-2023/gestaoclick-api/WebApi/WebApi.csproj": {
+    "C:\\Users\\diego\\OneDrive\\Área de Trabalho\\Aulas-01-2023\\gestaoclick-api\\WebApi\\WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/diegorocha/Developer/Aulas-01-2023/gestaoclick-api/WebApi/WebApi.csproj",
+        "projectUniqueName": "C:\\Users\\diego\\OneDrive\\Área de Trabalho\\Aulas-01-2023\\gestaoclick-api\\WebApi\\WebApi.csproj",
         "projectName": "WebApi",
-        "projectPath": "/Users/diegorocha/Developer/Aulas-01-2023/gestaoclick-api/WebApi/WebApi.csproj",
-        "packagesPath": "/Users/diegorocha/.nuget/packages/",
-        "outputPath": "/Users/diegorocha/Developer/Aulas-01-2023/gestaoclick-api/WebApi/obj/",
+        "projectPath": "C:\\Users\\diego\\OneDrive\\Área de Trabalho\\Aulas-01-2023\\gestaoclick-api\\WebApi\\WebApi.csproj",
+        "packagesPath": "C:\\Users\\diego\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\diego\\OneDrive\\Área de Trabalho\\Aulas-01-2023\\gestaoclick-api\\WebApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/diegorocha/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\diego\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,6 +40,22 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "AspNetCore.HealthChecks.Sqlite": {
+              "target": "Package",
+              "version": "[7.0.0-rc2.6, )"
+            },
+            "AspNetCore.HealthChecks.UI": {
+              "target": "Package",
+              "version": "[7.0.0-rc2.7, )"
+            },
+            "AspNetCore.HealthChecks.UI.Client": {
+              "target": "Package",
+              "version": "[7.0.0-rc2.7, )"
+            },
+            "AspNetCore.HealthChecks.UI.SQLite.Storage": {
+              "target": "Package",
+              "version": "[7.0.0-rc2.7, )"
+            },
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[12.0.1, )"
@@ -45,6 +63,18 @@
             "FluentValidation": {
               "target": "Package",
               "version": "[11.4.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[7.0.4, )"
             },
             "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
@@ -55,6 +85,14 @@
               "version": "[7.0.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.Abstractions": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
               "target": "Package",
               "version": "[7.0.4, )"
             },
@@ -92,7 +130,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.100/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -4,10 +4,10 @@ namespace Domain.Interfaces
 {
     public interface IFornecedorService : IDisposable
     {
-        Task<bool> Add(Fornecedor fornecedor);
-        Task<bool> Update(Fornecedor fornecedor);
-        Task<bool> Remove(int id);
+        Task Add(Fornecedor fornecedor);
+        Task Update(Fornecedor fornecedor);
+        Task Remove(int id);
 
-        Task<bool> UpdateEndereco(Endereco endereco);
+        Task UpdateEndereco(Endereco endereco);
     }
 }

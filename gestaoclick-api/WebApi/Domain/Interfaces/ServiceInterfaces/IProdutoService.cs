@@ -4,8 +4,8 @@ namespace Domain.Interfaces
 {
     public interface IProdutoService : IDisposable
     {
-        Task<bool> Add(Produto produto);
-        Task<bool> Update(Produto produto);
-        Task<bool> Remove(int id);
+        Task Add(Produto produto);
+        Task Update(Produto produto);
+        Task Remove(int id);
     }
 }
